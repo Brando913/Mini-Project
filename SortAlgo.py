@@ -2,7 +2,7 @@ import time
 import random
 
 #small array for algorithms to sort
-SmallArray = [3, 8, 12, 5, 19, 7, 2, 14, 9, 11]
+SmallArray = [random.randint(0, 100) for _ in range(10)]
 
 #large array for alorithms to sort
 LargeArray = [random.randint(0, 1000) for _ in range(10000)]
@@ -62,3 +62,54 @@ def merge(left, right):
     result.extend(right[j:])
     return result
 
+def main():
+    print("="*60)
+    print("SORTING ALGORITHM TIME COMPLEXITY ANALYSIS")
+    print("="*60)
+    
+    print("\n--- SMALL ARRAY (10 elements) ---")
+    small_test = SmallArray.copy()
+    print(f"Array: {small_test}\n")
+    
+    # Bubble Sort
+    start = time.time()
+    result = bubble_sort(small_test.copy())
+    bubble_small_time = time.time() - start
+    print(f"Bubble Sort: {bubble_small_time:.6f} seconds")
+    
+    # Insertion Sort
+    start = time.time()
+    result = insertion_sort(small_test.copy())
+    insertion_small_time = time.time() - start
+    print(f"Insertion Sort: {insertion_small_time:.6f} seconds")
+    
+    # Merge Sort
+    start = time.time()
+    result = merge_sort(small_test.copy())
+    merge_small_time = time.time() - start
+    print(f"Merge Sort: {merge_small_time:.6f} seconds")
+    
+    print("\n--- LARGE ARRAY (10,000 elements) ---")
+    
+    # Bubble Sort
+    start = time.time()
+    result = bubble_sort(LargeArray.copy())
+    bubble_large_time = time.time() - start
+    print(f"Bubble Sort: {bubble_large_time:.6f} seconds")
+    
+    # Insertion Sort
+    start = time.time()
+    result = insertion_sort(LargeArray.copy())
+    insertion_large_time = time.time() - start
+    print(f"Insertion Sort: {insertion_large_time:.6f} seconds")
+    
+    # Merge Sort
+    start = time.time()
+    result = merge_sort(LargeArray.copy())
+    merge_large_time = time.time() - start
+    print(f"Merge Sort: {merge_large_time:.6f} seconds")
+    
+    return 0
+
+if __name__=="__main__":
+    main()
