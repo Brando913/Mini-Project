@@ -1,19 +1,14 @@
 import time
 import random
+import matplotlib.pyplot as plt
+import numpy as np
 
-#small array for algorithms to sort
-SmallArray = [random.randint(0, 10) for _ in range(10)]
+# Generate test arrays
+def generate_array(size, max_val=10000):
+    return [random.randint(0, max_val) for _ in range(size)]
 
-MediumArray = [random.randint(0, 100) for _ in range(100)]
-
-XMediumArray = [random.randint(0, 1000) for _ in range(1000)]
-
-#large array for alorithms to sort
-LargeArray = [random.randint(0, 10000) for _ in range(10000)]
-
-#bubble sort
+# Sorting Algorithms
 def bubble_sort(arr):
-    """Bubble sort algorithm - repeatedly swaps adjacent elements if they're in wrong order"""
     n = len(arr)
     for i in range(n):
         swapped = False
@@ -25,9 +20,7 @@ def bubble_sort(arr):
             break
     return arr
 
-#insertion sort
 def insertion_sort(arr):
-    """Insertion sort algorithm - builds sorted array by inserting elements one at a time"""
     for i in range(1, len(arr)):
         key = arr[i]
         j = i - 1
@@ -37,23 +30,17 @@ def insertion_sort(arr):
         arr[j + 1] = key
     return arr
 
-#merge sort
 def merge_sort(arr):
-    """Merge sort algorithm - divide and conquer approach"""
     if len(arr) <= 1:
         return arr
-    
     mid = len(arr) // 2
     left = merge_sort(arr[:mid])
     right = merge_sort(arr[mid:])
-    
     return merge(left, right)
 
 def merge(left, right):
-    """Helper function to merge two sorted arrays"""
     result = []
     i = j = 0
-    
     while i < len(left) and j < len(right):
         if left[i] <= right[j]:
             result.append(left[i])
@@ -61,101 +48,84 @@ def merge(left, right):
         else:
             result.append(right[j])
             j += 1
-    
     result.extend(left[i:])
     result.extend(right[j:])
     return result
 
-def main():
-    print("="*60)
-    print("SORTING ALGORITHM TIME COMPLEXITY ANALYSIS")
-    print("="*60)
-    
-    print("\n--- SMALL ARRAY (10 elements) ---")
-    small_test = SmallArray.copy()
-    print(f"Array: {small_test}\n")
-    
-    # Bubble Sort
-    start = time.time()
-    result = bubble_sort(small_test.copy())
-    bubble_small_time = time.time() - start
-    print(f"Bubble Sort: {bubble_small_time:.6f} seconds")
-    
-    # Insertion Sort
-    start = time.time()
-    result = insertion_sort(small_test.copy())
-    insertion_small_time = time.time() - start
-    print(f"Insertion Sort: {insertion_small_time:.6f} seconds")
-    
-    # Merge Sort
-    start = time.time()
-    result = merge_sort(small_test.copy())
-    merge_small_time = time.time() - start
-    print(f"Merge Sort: {merge_small_time:.6f} seconds")
-    
-    print("\n--- MEDIUM ARRAY (100 elements) ---")
-    medium_test = MediumArray.copy()
-    
-    # Bubble Sort
-    start = time.time()
-    result = bubble_sort(medium_test.copy())
-    bubble_medium_time = time.time() - start
-    print(f"Bubble Sort: {bubble_medium_time:.6f} seconds")
-    
-    # Insertion Sort
-    start = time.time()
-    result = insertion_sort(medium_test.copy())
-    insertion_medium_time = time.time() - start
-    print(f"Insertion Sort: {insertion_medium_time:.6f} seconds")
-    
-    # Merge Sort
-    start = time.time()
-    result = merge_sort(medium_test.copy())
-    merge_medium_time = time.time() - start
-    print(f"Merge Sort: {merge_medium_time:.6f} seconds")
-    
-    print("\n--- XMEDIUM ARRAY (1,000 elements) ---")
-    xmedium_test = XMediumArray.copy()
-    
-    # Bubble Sort
-    start = time.time()
-    result = bubble_sort(xmedium_test.copy())
-    bubble_xmedium_time = time.time() - start
-    print(f"Bubble Sort: {bubble_xmedium_time:.6f} seconds")
-    
-    # Insertion Sort
-    start = time.time()
-    result = insertion_sort(xmedium_test.copy())
-    insertion_xmedium_time = time.time() - start
-    print(f"Insertion Sort: {insertion_xmedium_time:.6f} seconds")
-    
-    # Merge Sort
-    start = time.time()
-    result = merge_sort(xmedium_test.copy())
-    merge_xmedium_time = time.time() - start
-    print(f"Merge Sort: {merge_xmedium_time:.6f} seconds")
-    
-    print("\n--- LARGE ARRAY (10,000 elements) ---")
-    
-    # Bubble Sort
-    start = time.time()
-    result = bubble_sort(LargeArray.copy())
-    bubble_large_time = time.time() - start
-    print(f"Bubble Sort: {bubble_large_time:.6f} seconds")
-    
-    # Insertion Sort
-    start = time.time()
-    result = insertion_sort(LargeArray.copy())
-    insertion_large_time = time.time() - start
-    print(f"Insertion Sort: {insertion_large_time:.6f} seconds")
-    
-    # Merge Sort
-    start = time.time()
-    result = merge_sort(LargeArray.copy())
-    merge_large_time = time.time() - start
-    print(f"Merge Sort: {merge_large_time:.6f} seconds")
-    
-    return 0
 
-if __name__=="__main__":
+# Time measurement (averaged for accuracy)
+def measure_time(func, arr, runs=3):
+    total = 0
+    for _ in range(runs):
+        copy_arr = arr.copy()
+        start = time.perf_counter()
+        func(copy_arr)
+        total += time.perf_counter() - start
+    return total / runs
+
+
+# Graph plotting function
+def plot_time_complexity():
+    array_sizes = [10, 50, 100, 500, 1000, 5000, 10000]
+    bubble_times = []
+    insertion_times = []
+    merge_times = []
+
+    print("\nMeasuring algorithm performance...\n")
+
+    for size in array_sizes:
+        print(f"Testing size: {size}")
+        arr = generate_array(size)
+
+        # Only test Bubble/Insertion sort up to 2000
+        if size <= 2000:
+            bubble_times.append(measure_time(bubble_sort, arr))
+            insertion_times.append(measure_time(insertion_sort, arr))
+        else:
+            bubble_times.append(None)
+            insertion_times.append(None)
+
+        merge_times.append(measure_time(merge_sort, arr))
+
+    # Plot results
+    plt.figure(figsize=(12, 7))
+
+    plt.plot(array_sizes, merge_times, 'o-', label='Merge Sort O(n log n)')
+    if any(bubble_times):
+        plt.plot(array_sizes[:len(bubble_times)], bubble_times, '^-', label='Bubble Sort O(n²)')
+        plt.plot(array_sizes[:len(insertion_times)], insertion_times, 's-', label='Insertion Sort O(n²)')
+
+    plt.xlabel("Array Size (n)", fontsize=12)
+    plt.ylabel("Time (seconds)", fontsize=12)
+    plt.title("Sorting Algorithm Time Complexity Comparison", fontsize=14)
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.xscale("log")
+    plt.yscale("log")
+
+    plt.tight_layout()
+    plt.show()
+
+
+# Main Menu
+def main():
+    while True:
+        print("\n" + "="*60)
+        print("SORTING ALGORITHM TIME COMPLEXITY ANALYSIS")
+        print("="*60)
+        print("\n1. View Time Complexity Graph")
+        print("2. Exit")
+
+        choice = input("\nEnter your choice (1-2): ").strip()
+
+        if choice == "1":
+            plot_time_complexity()
+        elif choice == "2":
+            print("Exiting program.")
+            break
+        else:
+            print("Invalid choice. Please enter 1 or 2.")
+
+
+if __name__ == "__main__":
     main()
