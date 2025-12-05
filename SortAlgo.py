@@ -2,10 +2,14 @@ import time
 import random
 
 #small array for algorithms to sort
-SmallArray = [random.randint(0, 100) for _ in range(10)]
+SmallArray = [random.randint(0, 10) for _ in range(10)]
+
+MediumArray = [random.randint(0, 100) for _ in range(100)]
+
+XMediumArray = [random.randint(0, 1000) for _ in range(1000)]
 
 #large array for alorithms to sort
-LargeArray = [random.randint(0, 1000) for _ in range(10000)]
+LargeArray = [random.randint(0, 10000) for _ in range(10000)]
 
 #bubble sort
 def bubble_sort(arr):
@@ -88,6 +92,48 @@ def main():
     result = merge_sort(small_test.copy())
     merge_small_time = time.time() - start
     print(f"Merge Sort: {merge_small_time:.6f} seconds")
+    
+    print("\n--- MEDIUM ARRAY (100 elements) ---")
+    medium_test = MediumArray.copy()
+    
+    # Bubble Sort
+    start = time.time()
+    result = bubble_sort(medium_test.copy())
+    bubble_medium_time = time.time() - start
+    print(f"Bubble Sort: {bubble_medium_time:.6f} seconds")
+    
+    # Insertion Sort
+    start = time.time()
+    result = insertion_sort(medium_test.copy())
+    insertion_medium_time = time.time() - start
+    print(f"Insertion Sort: {insertion_medium_time:.6f} seconds")
+    
+    # Merge Sort
+    start = time.time()
+    result = merge_sort(medium_test.copy())
+    merge_medium_time = time.time() - start
+    print(f"Merge Sort: {merge_medium_time:.6f} seconds")
+    
+    print("\n--- XMEDIUM ARRAY (1,000 elements) ---")
+    xmedium_test = XMediumArray.copy()
+    
+    # Bubble Sort
+    start = time.time()
+    result = bubble_sort(xmedium_test.copy())
+    bubble_xmedium_time = time.time() - start
+    print(f"Bubble Sort: {bubble_xmedium_time:.6f} seconds")
+    
+    # Insertion Sort
+    start = time.time()
+    result = insertion_sort(xmedium_test.copy())
+    insertion_xmedium_time = time.time() - start
+    print(f"Insertion Sort: {insertion_xmedium_time:.6f} seconds")
+    
+    # Merge Sort
+    start = time.time()
+    result = merge_sort(xmedium_test.copy())
+    merge_xmedium_time = time.time() - start
+    print(f"Merge Sort: {merge_xmedium_time:.6f} seconds")
     
     print("\n--- LARGE ARRAY (10,000 elements) ---")
     
